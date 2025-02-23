@@ -1,0 +1,385 @@
+:root {
+  --text: white;
+  --gray-200: #b4b8bb;
+  --gray-300: #80868b;
+  --gray-500: #5f6368;
+  --gray-600: #444444;
+  --gray-700: #202020;
+  --gray-800: #171717;
+  --gray-900: #111111;
+  --gray-1000: #0a0a0a;
+  --border-stroke: #444444;
+  --accent-blue: rgb(161, 228, 242);
+  --accent-blue-active-bg: #001233;
+  --accent-blue-active: #98beff;
+  --accent-blue-headers: #448dff;
+  --accent-green: rgb(168, 218, 181);
+
+  --midnight-blue: rgb(0, 18, 51);
+  --blue-30: #99beff;
+
+  --accent-red: #ff4600;
+
+  --background: var(--gray-900);
+  --color: var(--text);
+
+  scrollbar-color: var(--gray-600) var(--gray-900);
+  scrollbar-width: thin;
+
+  --font-family: "Space Mono", monospace;
+
+  /* */
+  --Neutral-00: #000;
+  --Neutral-5: #181a1b;
+  --Neutral-10: #1c1f21;
+  --Neutral-15: #232729;
+  --Neutral-20: #2a2f31;
+  --Neutral-30: #404547;
+  --Neutral-50: #707577;
+  --Neutral-60: #888d8f;
+  --Neutral-80: #c3c6c7;
+  --Neutral-90: #e1e2e3;
+
+  --Green-500: #0d9c53;
+  --Green-700: #025022;
+
+  --Blue-500: #1f94ff;
+  --Blue-800: #0f3557;
+
+  --Red-400: #ff9c7a;
+  --Red-500: #ff4600;
+  --Red-600: #e03c00;
+  --Red-700: #bd3000;
+
+  --Neutral-5-rgb: 24, 26, 27;
+  
+  /* Mobile specific variables */
+  --mobile-bottom-spacing: 80px;
+  --mobile-touch-target: 44px;
+  --mobile-border-radius: 16px;
+  --mobile-padding: 12px;
+
+  /* Z-index hierarchy for mobile */
+  --z-index-side-panel: 1000;
+  --z-index-controls: 999;
+  --z-index-video: 1;
+}
+
+body {
+  font-family: "Space Mono", monospace;
+  background: var(--Neutral-30);
+}
+
+.material-symbols-outlined {
+  &.filled {
+    font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+  }
+}
+
+.space-mono-regular {
+  font-family: "Space Mono", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.space-mono-bold {
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.space-mono-regular-italic {
+  font-family: "Space Mono", monospace;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.space-mono-bold-italic {
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.hidden {
+  display: none;
+}
+
+.flex {
+  display: flex;
+}
+
+.h-screen-full {
+  height: 100vh;
+}
+
+.w-screen-full {
+  width: 100vw;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+}
+
+.streaming-console {
+  background: var(--Neutral-5);
+  color: var(--gray-300);
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  a,
+  a:visited,
+  a:active {
+    color: var(--gray-300);
+  }
+
+  .disabled {
+    pointer-events: none;
+
+    > * {
+      pointer-events: none;
+    }
+  }
+
+  main {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    gap: 1rem;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 1rem;
+
+    @media (max-width: 768px) {
+      gap: 0.5rem;
+      padding: 0.5rem;
+    }
+  }
+
+  .main-app-area {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
+  }
+
+  .function-call {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 50%;
+    overflow-y: auto;
+
+    @media (max-width: 768px) {
+      height: 40%;
+    }
+  }
+}
+
+.streaming-bot {
+  background: var(--Neutral-5);
+  color: var(--gray-300);
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    padding-bottom: calc(var(--mobile-bottom-spacing) * 2);
+    height: calc(100vh - var(--mobile-bottom-spacing));
+    overflow-y: auto;
+
+    main {
+      padding-bottom: calc(var(--mobile-bottom-spacing) + 80px);
+      min-height: calc(100vh - var(--mobile-bottom-spacing));
+    }
+
+    .main-app-area {
+      gap: var(--mobile-padding);
+      padding: var(--mobile-padding);
+      padding-bottom: calc(var(--mobile-bottom-spacing) + 20px);
+      height: auto;
+      min-height: calc(100vh - var(--mobile-bottom-spacing) * 2);
+      
+      > * {
+        width: 100%;
+      }
+    }
+
+    .stream {
+      position: relative;
+      aspect-ratio: 16/9;
+      width: 100%;
+      max-height: 35vh;
+      margin: var(--mobile-padding) 0;
+      border-radius: var(--mobile-border-radius);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    @media (max-width: 768px) {
+      padding-bottom: calc(var(--mobile-bottom-spacing) * 2 + env(safe-area-inset-bottom));
+    }
+  }
+}
+
+/* video player */
+.stream {
+  flex-grow: 1;
+  max-width: 90%;
+  border-radius: 32px;
+  max-height: fit-content;
+  object-fit: contain;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    border-radius: var(--mobile-border-radius);
+    margin: var(--mobile-padding) 0;
+    max-height: 40vh;
+    transition: all 0.3s ease-out;
+    transform-origin: center;
+    
+    &.hidden {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    &:not(.hidden) {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    z-index: var(--z-index-video);
+    /* Prevent video element from capturing unwanted touches */
+    touch-action: none;
+    pointer-events: none;
+  }
+
+  &.hidden {
+    display: none;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (max-width: 768px) {
+  button, 
+  select, 
+  input {
+    min-height: 44px; /* Minimum touch target size */
+    min-width: 44px;
+  }
+
+  .flex {
+    gap: 0.75rem;
+  }
+
+  .main-app-area {
+    padding: var(--mobile-padding);
+    gap: var(--mobile-padding);
+  }
+
+  .function-call {
+    height: auto;
+    max-height: 40vh;
+  }
+
+  /* Add safe area insets support */
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .side-panel {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+  }
+}
+
+/* Improve scrolling on mobile */
+* {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+  .streaming-bot {
+    .main-app-area {
+      flex-direction: row;
+      align-items: flex-start;
+      padding-bottom: calc(var(--mobile-bottom-spacing) + 40px);
+      
+      .stream {
+        max-width: 50%;
+        max-height: 70vh;
+      }
+    }
+  }
+
+  .side-panel {
+    &.open {
+      height: min(90vh, 400px);
+    }
+  }
+
+  .control-tray {
+    .actions-nav {
+      flex-wrap: nowrap;
+      gap: 12px;
+      padding: 8px;
+      
+      .action-button {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+.side-panel {
+  @media (max-width: 768px) {
+    z-index: var(--z-index-side-panel);
+    
+    /* Improve touch target spacing */
+    .input-content, .streaming-indicator, .react-select {
+      touch-action: manipulation;
+    }
+
+    /* Add momentum scrolling */
+    .side-panel-container {
+      scroll-snap-type: y proximity;
+      overscroll-behavior-y: contain;
+    }
+  }
+}
+
+.control-tray {
+  @media (max-width: 768px) {
+    z-index: var(--z-index-controls);
+    
+    .actions-nav {
+      /* Ensure buttons have enough spacing */
+      > * {
+        margin: 4px;
+      }
+      
+      /* Prevent text selection on double tap */
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+  }
+}
