@@ -191,6 +191,26 @@ function ControlTray({
               onIcon="videocam_off"
               offIcon="videocam"
             />
+            {webcam.isStreaming && webcam.switchCamera && (
+              <button 
+                className="action-button camera-switch"
+                onClick={async () => {
+                  if (webcam.switchCamera) {
+                    try {
+                      const newStream = await webcam.switchCamera();
+                      setActiveVideoStream(newStream);
+                      onVideoStreamChange(newStream);
+                    } catch (err) {
+                      console.error('Failed to switch camera:', err);
+                    }
+                  }
+                }}
+              >
+                <span className="material-symbols-outlined filled">
+                  {webcam.facingMode === 'user' ? 'camera_rear' : 'camera_front'}
+                </span>
+              </button>
+            )}
           </>
         )}
         {children}

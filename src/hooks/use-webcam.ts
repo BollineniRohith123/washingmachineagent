@@ -14,56 +14,58 @@
  * limitations under the License.
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { UseMediaStreamResult } from "./use-media-stream-mux";
 
 export function useWebcam(): UseMediaStreamResult {
-  const [stream, setStream] = useState<MediaStream | null>(null);
   const [isStreaming, setIsStreaming] = useState(false);
-
-  useEffect(() => {
-    const handleStreamEnded = () => {
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
+  const [stream, setStream] = useState<MediaStream | null>(null);
+  
+  const start = useCallback(async () => {
+    try {
+      const newStream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: facingMode,
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
+        audio: false,
+      });
+      setIsStreaming(true);
+      setStream(newStream);
+      return newStream;
+    } catch (err) {
+      console.error('Error accessing webcam:', err);
       setIsStreaming(false);
-      setStream(null);
-    };
-    if (stream) {
-      stream
-        .getTracks()
-        .forEach((track) => track.addEventListener("ended", handleStreamEnded));
-      return () => {
-        stream
-          .getTracks()
-          .forEach((track) =>
-            track.removeEventListener("ended", handleStreamEnded),
-          );
-      };
+      throw new Error('Failed to access webcam');
     }
+  }, [facingMode]);
+
+  const stop = useCallback(() => {
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+      setStream(null);
+    }
+    setIsStreaming(false);
   }, [stream]);
 
-  const start = async () => {
-    const mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-    });
-    setStream(mediaStream);
-    setIsStreaming(true);
-    return mediaStream;
-  };
-
-  const stop = () => {
-    if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
-      setStream(null);
-      setIsStreaming(false);
+  const switchCamera = useCallback(async () => {
+    const newFacingMode = facingMode === 'user' ? 'environment' : 'user';
+    setFacingMode(newFacingMode);
+    if (isStreaming) {
+      stop();
     }
-  };
+    return await start();
+  }, [facingMode, isStreaming, start, stop]);
 
-  const result: UseMediaStreamResult = {
-    type: "webcam",
+  return {
+    isStreaming,
     start,
     stop,
-    isStreaming,
-    stream,
+    switchCamera,
+    facingMode,
+    type: 'webcam' as const,
+    stream
   };
-
-  return result;
 }

@@ -251,6 +251,51 @@
     flex-direction: column;
     gap: 1rem;
   }
+
+  @media (max-width: 768px) {
+    .action-button {
+      &.camera-switch {
+        background: var(--Blue-800);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        
+        &:active {
+          background: var(--Blue-700);
+          transform: rotate(180deg) scale(0.95);
+        }
+      }
+    }
+  }
+}
+
+.camera-switch {
+  background: var(--Blue-800);
+  color: var(--Blue-500);
+  transition: transform 0.3s ease-out;
+
+  &:hover {
+    background: var(--Blue-800);
+    border-color: var(--Blue-500);
+  }
+
+  &:active {
+    transform: rotate(180deg) scale(0.95);
+  }
+
+  @media (max-width: 768px) {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    order: 2;
+    
+    .material-symbols-outlined {
+      font-size: 24px;
+      transition: transform 0.3s ease-out;
+    }
+    
+    &:active .material-symbols-outlined {
+      transform: rotate(-180deg);
+    }
+  }
 }
 
 @keyframes opacity-pulse {

@@ -15,9 +15,11 @@
  */
 
 export type UseMediaStreamResult = {
-  type: "webcam" | "screen";
+  isStreaming: boolean;
   start: () => Promise<MediaStream>;
   stop: () => void;
-  isStreaming: boolean;
+  switchCamera?: () => Promise<MediaStream>;
+  facingMode?: 'user' | 'environment';
+  type: 'webcam' | 'screen';
   stream: MediaStream | null;
 };

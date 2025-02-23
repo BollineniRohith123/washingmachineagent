@@ -29,6 +29,15 @@ const filterOptions = [
   { value: "none", label: "All" },
 ];
 
+// Add common suggestions/prompts
+const suggestions = [
+  "Can you help me with...",
+  "What's the weather like...",
+  "Tell me more about...",
+  "How do I...",
+  "Could you explain..."
+];
+
 export default function SidePanel() {
   const { connected, client } = useLiveAPIContext();
   const [open, setOpen] = useState(true);
@@ -42,6 +51,9 @@ export default function SidePanel() {
     label: string;
   } | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [filteredSuggestions, setFilteredSuggestions] = useState(suggestions);
 
   //scroll the log to the bottom when new logs come in
   useEffect(() => {
@@ -75,6 +87,28 @@ export default function SidePanel() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    setTextInput(value);
+    
+    // Filter suggestions based on input
+    if (value && value.length > 0) {
+      const filtered = suggestions.filter(
+        suggestion => suggestion.toLowerCase().startsWith(value.toLowerCase())
+      );
+      setFilteredSuggestions(filtered);
+      setShowSuggestions(filtered.length > 0);
+    } else {
+      setFilteredSuggestions(suggestions);
+      setShowSuggestions(false);
+    }
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setTextInput(suggestion);
+    setShowSuggestions(false);
+  };
 
   const handleSubmit = () => {
     client.send([{ text: textInput }]);
@@ -150,16 +184,24 @@ export default function SidePanel() {
                 handleSubmit();
               }
             }}
-            onChange={(e) => setTextInput(e.target.value)}
+            onChange={handleInputChange}
             value={textInput}
-          ></textarea>
-          <span
-            className={cn("input-content-placeholder", {
-              hidden: textInput.length,
-            })}
-          >
-            Type&nbsp;something...
-          </span>
+            placeholder="Type something..."
+          />
+          
+          {showSuggestions && (
+            <div className="suggestions">
+              {filteredSuggestions.map((suggestion, index) => (
+                <div 
+                  key={index} 
+                  className="suggestion-item"
+                  onClick={() => handleSuggestionClick(suggestion)}
+                >
+                  {suggestion}
+                </div>
+              ))}
+            </div>
+          )}
 
           <button
             className="send-button material-symbols-outlined filled"
