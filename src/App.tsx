@@ -14,13 +14,49 @@
  * limitations under the License.
  */
 
-import { useRef, useState } from "react";
+import React, { useRef, useState, Suspense } from "react";
 import "./App.scss";
 import { LiveAPIProvider } from "./contexts/LiveAPIContext";
-import SidePanel from "./components/side-panel/SidePanel";
-import { GenList } from "./components/genlist/GenList";
-import ControlTray from "./components/control-tray/ControlTray";
 import cn from "classnames";
+
+// Lazy loaded components
+const SidePanel = React.lazy(() => import("./components/side-panel/SidePanel"));
+const ControlTray = React.lazy(() => import("./components/control-tray/ControlTray"));
+
+// Import GenList directly since it's not a default export
+const GenListComponent = React.lazy(() => 
+  import("./components/genlist/GenList").then(module => ({
+    default: module.GenList
+  }))
+);
+
+// Loading component
+const LoadingSpinner = () => (
+  <div className="loading-spinner">
+    <div className="spinner"></div>
+    <style>{`
+      .loading-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100px;
+      }
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid var(--gray-600);
+        border-radius: 50%;
+        border-top-color: var(--accent-blue);
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    `}</style>
+  </div>
+);
 
 const API_KEY = process.env.REACT_APP_GEMINI_API_KEY as string;
 if (typeof API_KEY !== "string") {
@@ -41,11 +77,14 @@ function App() {
     <div className="App">
       <LiveAPIProvider url={uri} apiKey={API_KEY}>
         <div className="streaming-console">
-          <SidePanel />
+          <Suspense fallback={<LoadingSpinner />}>
+            <SidePanel />
+          </Suspense>
           <main>
             <div className="main-app-area">
-              {/* APP goes here */}
-              <GenList />
+              <Suspense fallback={<LoadingSpinner />}>
+                <GenListComponent />
+              </Suspense>
               <video
                 className={cn("stream", {
                   hidden: !videoRef.current || !videoStream,
@@ -56,13 +95,15 @@ function App() {
               />
             </div>
 
-            <ControlTray
-              videoRef={videoRef}
-              supportsVideo={true}
-              onVideoStreamChange={setVideoStream}
-            >
-              {/* put your own buttons here */}
-            </ControlTray>
+            <Suspense fallback={<LoadingSpinner />}>
+              <ControlTray
+                videoRef={videoRef}
+                supportsVideo={true}
+                onVideoStreamChange={setVideoStream}
+              >
+                {/* put your own buttons here */}
+              </ControlTray>
+            </Suspense>
           </main>
         </div>
       </LiveAPIProvider>

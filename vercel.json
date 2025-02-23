@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "framework": null,
+  "buildCommand": "node build.js",
+  "outputDirectory": "build",
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/[^.]+",
+      "dest": "/index.html"
+    }
+  ],
+  "env": {
+    "REACT_APP_GEMINI_API_KEY": "AIzaSyBZ_eTrH5cVXR3UmwAFmIb_DAVhvLVClJk"
+  }
+}

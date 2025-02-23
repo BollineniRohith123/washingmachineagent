@@ -4,12 +4,36 @@
   text-align: center;
   font-size: 0.8rem;
   color: var(--Neutral-90, #e1e2e3);
-  overflow: scroll;
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
-  ::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
+  .camera-section {
+    width: 100%;
+    background: var(--Neutral-5, #181a1b);
+    border-bottom: 1px solid var(--Neutral-30, #404547);
+    position: relative;
+
+    video {
+      background: var(--Neutral-10, #1f2223);
+      border-radius: 8px;
+      margin: 1rem auto;
+    }
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .content-section {
+    flex: 1;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   .initial-screen {
@@ -31,42 +55,38 @@
       text-align: center;
       font-family: "Space Mono";
       font-size: 1.4rem;
-      font-style: normal;
       font-weight: 400;
       line-height: normal;
     }
 
-    input {
-      color: var(--Neutral-100, #fff);
-      text-align: center;
-      font-family: "Google Sans";
-      font-size: 1.4rem;
-      font-style: normal;
-      font-weight: 400;
-      line-height: normal;
-      background: none;
-      border: none;
-      border-bottom: solid 1px var(--Neutral-30, #404547);
-      outline: none;
-      padding: 0.5rem;
+    .initialMessageInput {
       width: 100%;
       max-width: 450px;
-      margin: auto;
-    }
+      margin: 1rem auto;
+      padding: 0.5rem;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--Neutral-30, #404547);
+      color: var(--Neutral-100, #fff);
+      font-family: "Google Sans";
+      font-size: 1.2rem;
+      text-align: center;
+      outline: none;
 
-    input:hover,
-    input:focus,
-    input:active {
-      border-bottom: solid 1px var(--Neutral-90, #e1e2e3);
-    }
+      &:hover,
+      &:focus,
+      &:active {
+        border-bottom-color: var(--Neutral-90, #e1e2e3);
+      }
 
-    input::placeholder {
-      color: var(--Neutral-30, #404547);
-    }
+      &::placeholder {
+        color: var(--Neutral-30, #404547);
+      }
 
-    input:focus::placeholder,
-    input:active::placeholder {
-      color: var(--Neutral-5, #181a1b);
+      &:focus::placeholder,
+      &:active::placeholder {
+        color: var(--Neutral-5, #181a1b);
+      }
     }
   }
 
